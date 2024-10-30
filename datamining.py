@@ -7,7 +7,7 @@ def get_dataset(filename, rows=None):
     output_data = []
     #driver_country_data = {}
 
-    events = fastf1.get_event_schedule(2024)
+    events = fastf1.get_event_schedule(2023)
 
     for evnt in events['OfficialEventName']:
     #for idx, race_event in events.iterrows(): 
