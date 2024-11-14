@@ -1,16 +1,11 @@
-# Assignment #2, 
-# Name: Group Assignment #2
-# Due Date: Monday, October 7 2024
-
 # Import necessary libraries
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
 # Functions for visualizations 1 and 2:
-
 def get_top5_drivers(df):
-  "Given the dataframe, calculates and returns a series of the top 5 F1 drivers from 2018-2024."
+  "Given the dataframe, calculates and returns a series of the top 5 F1 drivers from 2023."
 
   # Group the data by driver name and take sum from individual's total point
   total_points = df.groupby('Driver Name')['Race Point'].sum().reset_index()
@@ -29,13 +24,11 @@ def normalizeWeather(weatherDf):
     weatherDf.to_csv("normalizedData.csv")
   return weatherDf
 
-
 def get_race_positions(driver_name, df):
-  "Given the driver names, returns their race positions from 2018-2024."
+  "Given the driver names, returns their race positions in 2023."
 
   driver_data = df[df['Driver Name'] == driver_name]
   return driver_data['Position'], driver_data['Race Name']
-
 
 def get_weatherConditions(raceNames, df):
   "Given a series of race names, returns the normalized numerical weather conditions for the race."
@@ -88,12 +81,10 @@ def plotWeatherCondition(top5_drivers, condition, conditionName, weatherData):
     plt.gca().invert_yaxis()
     plt.xticks(rotation='vertical') # 글자 수직정렬
     plt.show()
-    
-    
 
 def visualization12():
     # Load the CSV data file
-    f1_data = pd.read_csv("f1_2023Weather.csv") # i will update the csv file (the one with 2018-2024)
+    f1_data = pd.read_csv("f1_2023Weather.csv") # i will update the csv file (the one with 2023)
     f1_data = normalizeWeather(f1_data)
 
 
@@ -104,15 +95,15 @@ def visualization12():
 
     # Plot setup
     plt.figure(figsize=(30,6))
-    plt.title("Top 5 F1 Drivers Performance (2020-2024)")
+    plt.title("Top 5 F1 Drivers Performance (2023)")
 
-    # Make the first plotting with the top 5 drivers and their positions from 2018-2024
+    # Make the first plotting with the top 5 drivers and their positions from 2023
     for driver in top5_drivers:
         positions, race_names = get_race_positions(driver, f1_data)
         plt.scatter(race_names, positions)
 
     # Plot specifications
-    plt.title("Top 5 Racer's Performance 2018-2024")
+    plt.title("Top 5 Racer's Performance 2023")
     plt.yticks(range(1, 21), map(str, range(1, 21))) 
     plt.gca().invert_yaxis()
     plt.grid()
@@ -166,97 +157,100 @@ visualization12()
 
 # Functions for visualization 3:
 def load_data():
-
-    return pd.read_csv("f1_2023Weather.csv")
+    return pd.read_csv("f1_2023Weather.csv") # loads data from CSV file
 
 #Prepare the data for visualization
 def prepare_data(df):
-    # Convert the 'Race Date' to datetime for plt
+    # Convert the 'Race Date' to datetime for plotting
     df['Race Date'] = pd.to_datetime(df['Race Date'])
-
     # Sort the dataframe by 'Race Date'
     df = df.sort_values(by='Race Date')
-
+    # returns prepared data
     return df
 
-# Function to calculate total points for each driver and get the top 5 (like what we did)
+# Function to calculate total points for each driver and get the top 5 drivers
 def get_top5_drivers(df):
+    # groups dataframe by Driver Name column then calculates total points each driver has
     total_points = df.groupby('Driver Name')['Race Point'].sum().reset_index()
+    # sorts total_points dataframe by Race Point column (descending order) and gets top 5 drivers
     top5_drivers = total_points.sort_values(by='Race Point', ascending=False).head(5)
+    # returns names of top 5 drivers with most points
     return top5_drivers['Driver Name']
 
-#Plot performance of a single driver over time
+# Plots performance of a single driver over time
 def plot_driver_performance(df, driver_name):
+    # filters dataframe to obtain data for specific driver
     driver_data = df[df['Driver Name'] == driver_name]
 
+    # creates new figure using matplotlib (width: 10in, height: 6in)
     plt.figure(figsize=(10, 6))
+  
+    # creates a line plot of driver's performance (race positions over time)
+    # x-axis are race dates, y-axis are positions driver finished in
+    # each race is marked with 'o' and the driver_name is used to label the plot
     plt.plot(driver_data['Race Date'], driver_data['Position'], marker='o', label=driver_name)
 
-    plt.gca().invert_yaxis()  # Invert the y-axis - 1st position at the top
-    plt.title(f"{driver_name}'s Performance Over Time (2018-2024)")
-    plt.xlabel("Race Date")
-    plt.ylabel("Race Position")
-    plt.xticks(rotation=45)
-    plt.yticks(range(1, 21), map(str, range(1, 21)))  # y goes from 1-20
-    plt.grid(True)
-    plt.legend()
-    plt.tight_layout()
-
-    # Show the plot
-    plt.show()
+    # formats plot before displaying it
+    plt.gca().invert_yaxis()  # inverts y-axis (1st position at top of plot)
+    plt.title(f"{driver_name}'s Performance Over Time (2023)") # adds title to plot
+    plt.xlabel("Race Date") # labels x-axis
+    plt.ylabel("Race Position") # labels y-axis
+    plt.xticks(rotation=45) # formats x-axis labels
+    plt.yticks(range(1, 21), map(str, range(1, 21)))  # sets y-axis to range from 1-20 (indicates positions)
+    plt.grid(True) # allows grid on plot
+    plt.legend() # displays legend for plot
+    plt.tight_layout() # adjusts layout of plot so everything fits inside
+    plt.show() # shows plot
 
 def visualization3():
   # Load the dataset
   f1_data = load_data()
-
   # Prepare the data (sort by Race Date)
   f1_data = prepare_data(f1_data)
-
   # Get the top 5 drivers based on points
   top5_drivers = get_top5_drivers(f1_data)
-
   # Plot each driver separately
   for driver in top5_drivers:
+      # calls method to plot individual driver performance
       plot_driver_performance(f1_data, driver)
 
-#visualization3()
+visualization3() # calls method to generate third visualization
 
-#Plot performance of multiple drivers over time
+# Plot performance of multiple drivers over time
 def plot_top5_performance(df, top5_drivers):
+    # create new figure with matplot lib (size of 12in by 7 in)
     plt.figure(figsize=(12, 7))
 
     # Loop through each driver and plot their performance
     for driver_name in top5_drivers:
+        # filters dataframe to get rows of specific driver
         driver_data = df[df['Driver Name'] == driver_name]
+        # plots performance of current driver
         plt.plot(driver_data['Race Date'], driver_data['Position'], marker='o', label=driver_name)
 
-    plt.gca().invert_yaxis()  # Invert the y-axis - 1st position at the top
-    plt.title("Top 5 Drivers' Performance Over Time (2018-2024)")
-    plt.xlabel("Race Date")
-    plt.ylabel("Race Position")
-    plt.xticks(rotation=45)
-    plt.yticks(range(1, 21), map(str, range(1, 21)))  # y goes from 1-20
-    plt.grid(True)
-    plt.legend()
-    plt.tight_layout()
-
-    # Show the plot
-    plt.show()
+    # formats plot before displaying it
+    plt.gca().invert_yaxis()  # invert y-axis (1st position at top)
+    plt.title("Top 5 Drivers' Performance Over Time (2023)")
+    plt.xlabel("Race Date") # labels x-axis
+    plt.ylabel("Race Position") # labels y-axis
+    plt.xticks(rotation=45) # formats x-axis labels
+    plt.yticks(range(1, 21), map(str, range(1, 21)))  # formats y-axis tick marks to range from 1 - 20
+    plt.grid(True) # allows grid on plot
+    plt.legend() # displays legend for plot
+    plt.tight_layout() # adjusts layout of plot so everything fits inside
+    plt.show() # shows/renders plot
 
 def visualization3Complete():
    # Load the dataset
     f1_data = load_data()
-
     # Prepare the data (sort by Race Date)
     f1_data = prepare_data(f1_data)
-
     # Get the top 5 drivers based on points
     top5_drivers = get_top5_drivers(f1_data)
-
-    # Plot performance of top 5 drivers over time
+    # Plot performance of top 5 drivers over time in same graph
     plot_top5_performance(f1_data, top5_drivers)
 
-visualization3Complete()
+visualization3Complete() # calls method to create graph showing performance of top 5 drivers
 
 # Functions for visualization 4: 
 #Prepare the data for visualization (convert date and sort)
@@ -300,7 +294,7 @@ def plot_rainy_vs_dry(df, top5_drivers):
     #Plot the data
     df_plot.plot(kind='barh', figsize=(10,6))
 
-    plt.title("Top 5 Drivers: Rainy vs Dry Races Average Positions (2018-2024)")
+    plt.title("Top 5 Drivers: Rainy vs Dry Races Average Positions (2023)")
     plt.xlabel("Average Position")
     plt.ylabel("Drivers")
     plt.grid(True)
