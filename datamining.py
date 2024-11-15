@@ -15,8 +15,7 @@ def get_dataset(filename, rows=None):
 
         race_name = evnt
         # found directly from API to extra event data by name
-        # probably could use pandas.df to make this simpler?
-        race_event = events.get_event_by_name(evnt) # might not need
+        race_event = events.get_event_by_name(evnt)
         race_country = race_event['Country']
         race_loc = race_event['Location']
         race_format = race_event['EventFormat']
@@ -40,7 +39,7 @@ def get_dataset(filename, rows=None):
         if race_results.empty:
             print("Skipping {} {}- there is no data.".format(race_name, race_stats.date))
             continue
-        # weather data (code added on 10/1)
+        # weather data
         weather_data = race_stats.weather_data
         weather_temp_avg = weather_data['AirTemp'].mean()
         weather_humidity_avg = weather_data['Humidity'].mean()
@@ -62,7 +61,7 @@ def get_dataset(filename, rows=None):
             # add race start timestamp
             race_info['Race Start Time'] = race_ts
 
-            # set weather information (code added on 10/1)
+            # set weather information
             race_info['Air Temperature'] = weather_temp_avg
             race_info['Relative Humidity'] = weather_humidity_avg
             race_info['Air Pressure'] = weather_pressure_avg
@@ -100,8 +99,7 @@ def get_dataset(filename, rows=None):
 
     _write_csv(output_data, filename) # write data to csv after all races
 
-# csv file
-
+# creating csv file
 def _write_csv(output_data, filename):
     fieldnames = output_data[0].keys()
     # Open the file in write mode
@@ -114,12 +112,11 @@ def _write_csv(output_data, filename):
         writer.writerows(output_data)
 
 # entry point
-
 if __name__ == '__main__':
     aparser = argparse.ArgumentParser(
-        description='Generate csv file for 2024 F1 season results')
+        description='Generate csv file for 2023 F1 season results')
 
-    # filename handling, default filename will be f1_2024.csv
+    # filename handling, default filename will be f1_2023.csv
     aparser.add_argument(
         '--filename',
         default='weatherIncluded3.csv',
