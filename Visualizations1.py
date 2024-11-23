@@ -1,3 +1,7 @@
+# How to run:
+#    - make sure the CSV file is in the same directory as the python file
+#    - run/execute the program and view the graphs as they're generated
+
 # Import necessary libraries
 import pandas as pd
 import matplotlib.pyplot as plt
