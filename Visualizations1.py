@@ -289,10 +289,11 @@ def plot_rainy_vs_dry(df, top5_drivers):
         dry_positions.append(dry_avg)
 
     #horizontal bar chart
+    #Pandas data frame created with 3 columns
     df_plot = pd.DataFrame({
-        'Driver': top5_drivers,
-        'Rainy': rainy_positions,
-        'Dry': dry_positions
+        'Driver': top5_drivers,   #Top 5 drivers
+        'Rainy': rainy_positions, #average positions in rainy races
+        'Dry': dry_positions      #average positions in dry races
     }).set_index('Driver')
 
     #Plot the data
