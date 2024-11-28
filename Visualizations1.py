@@ -108,14 +108,14 @@ def visualization12():
 
     # Plot specifications
     plt.title("Top 5 Racer's Performance 2023")
-    plt.yticks(range(1, 21), map(str, range(1, 21))) 
+    plt.yticks(range(1, 21), map(str, range(1, 21))) # formats y-axis tick marks to 1-20
     plt.gca().invert_yaxis()
-    plt.grid()
-    plt.ylabel("Positions") 
-    plt.xlabel("Race Name") 
-    plt.xticks(rotation='vertical') 
-    plt.legend(top5_drivers, bbox_to_anchor=(1,1))
-    plt.show()
+    plt.grid()  # allows grid on plot
+    plt.ylabel("Positions") # labels y-axis
+    plt.xlabel("Race Name") # labels x-axis
+    plt.xticks(rotation='vertical') # formats x-axis labels
+    plt.legend(top5_drivers, bbox_to_anchor=(1,1))  # displays legend for plot
+    plt.show()  # shows/renders plot
 
     
     weatherData = pd.read_csv("f1_2023Weather.csv")
